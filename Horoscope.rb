@@ -35,7 +35,7 @@ class Horoscope
 		when "Рыба","Рыбы"
 			@zodiac_sign="pisces"
 		else
-			raise "Некорректный знак зодиака"	
+			@zodiac_sign=false
 		end
 	end
 #Первый сайт

@@ -1,12 +1,21 @@
 require_relative 'Horoscope.rb'
-	state=true
 
-	while state==true
+state=true
 
+while state==true
+	begin
 		puts "\nВведите знак зодиака:"
-
-    horo_sign=Horoscope.new(gets.chomp.encode('UTF-8').capitalize)
-
-    horo_sign.show_horo
+		#Создание объекта 
+		horo=Horoscope.new(gets.chomp.encode('UTF-8').capitalize)
+		#Проверка корректности ввода
+		if !horo.zodiac_sign
+			raise
+		end
+	rescue=>error
+		puts "Некорректный знак зодиака"
+		retry
+	end
+	#вывод гороскопа
+	horo.show_horo
 
 end
