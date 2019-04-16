@@ -15,7 +15,7 @@ while state==true
 		puts "Некорректный знак зодиака"
 		retry
 	end
-	#вывод гороскопа
+	#вывод гороскопов
 	horo.show_horo
 
 end
