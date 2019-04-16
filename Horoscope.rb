@@ -39,83 +39,24 @@ class Horoscope
 			@zodiac_sign=false
 		end
 	end
-#Первый сайт
-	def first_site
-
-		puts " Сайт horo.mail.ru"
-
-		doc = Nokogiri::HTML(open("https://horo.mail.ru/prediction/#{@zodiac_sign}/today/"))
-		
-		doc.css('div[class="article__item article__item_alignment_left article__item_html"]').each do |text|
-
-  	puts text.content.lstrip
-
-		end
-
-	end
-#Второй сайт
-	def second_site
-
-		puts "\n Сайт 1001goroskop.ru"
-
-		doc = Nokogiri::HTML(open("http://1001goroskop.ru/?znak=#{@zodiac_sign}"))
-
-		doc.css('div[itemprop="description"]').each do |text|
-
-  	puts text.content.lstrip
-
-		end		
-
-	end
-
-	def third_site
-
-		puts "\n Сайт obozrevatel.com"
-
-		doc = Nokogiri::HTML(open("https://www.obozrevatel.com/astro/#{@zodiac_sign}/"))
-
-		doc.css('div[class="astro-content__txt"] p').each do |text|
-
-  	puts text.content.lstrip
-
-		end		
-
-	end
-
-	def fourth_site
-
-		puts "\n Сайт horoscopes.rambler.ru"
-
-		doc = Nokogiri::HTML(open("https://horoscopes.rambler.ru/#{@zodiac_sign}/"))
-
-		doc.css('div[class="_1dQ3"] span').each do |text|
-
-  	puts text.content.lstrip
-
-		end	
-
-	end
-
-	def fifth_site
-
-		puts "\n Сайт orakul.com"
-
-		doc = Nokogiri::HTML(open("https://orakul.com/horoscope/astrologic/more/#{@zodiac_sign}/today.html"))
-
-		doc.css('div[class="horoBlock"] p').each do |text|
-
-  	puts text.content.lstrip
-
-		end	
-		
-	end
 
 	def show_horo
-		self.first_site
-		self.second_site
-		self.third_site
-		self.fourth_site
-		self.fifth_site
-	end
+		k=0	
+		#Наборы адрес сайта->критерий поиска на нем текста
+		urls={
+			"https://horo.mail.ru/prediction/#{@zodiac_sign}/today/"=>'div[class="article__item article__item_alignment_left article__item_html"]',
+			"http://1001goroskop.ru/?znak=#{@zodiac_sign}"=>'div[itemprop="description"]',
+			"https://www.obozrevatel.com/astro/#{@zodiac_sign}/"=>'div[class="astro-content__txt"] p',
+			"https://horoscopes.rambler.ru/#{@zodiac_sign}/"=>'div[class="_1dQ3"] span',
+			"https://orakul.com/horoscope/astrologic/more/#{@zodiac_sign}/today.html"=>'div[class="horoBlock"] p'
+		}
 
+		urls.each do |key,value|
+			doc = Nokogiri::HTML(open(key.to_s))
+			puts "\nСайт #{k+=1} : "
+			doc.css(value.to_s).each do |text|
+				puts text.content.lstrip
+			end
+		end
+	end
 end
