@@ -1,4 +1,5 @@
 require 'open-uri'
+require 'nokogiri'
 
 class Horoscope
 
@@ -41,81 +42,72 @@ class Horoscope
 #Первый сайт
 	def first_site
 
-		url= "https://horo.mail.ru/prediction/#{@zodiac_sign}/today/"
+		puts " Сайт horo.mail.ru"
 
-		page=open(url)
+		doc = Nokogiri::HTML(open("https://horo.mail.ru/prediction/#{@zodiac_sign}/today/"))
+		
+		doc.css('div[class="article__item article__item_alignment_left article__item_html"]').each do |text|
 
-		page_text=page.read
+  	puts text.content.lstrip
 
-		horoscope_array=page_text.scan(%r{article__item article__item_alignment_left article__item_html">.*<p>(.*)</p>.*<p>(.*)</p>}m)
-
-		horoscope_string=horoscope_array.join.encode
-
-		puts "Сайт horo.mail.ru \n #{horoscope_string}\n"
+		end
 
 	end
 #Второй сайт
 	def second_site
 
-		url= "http://1001goroskop.ru/?znak=#{@zodiac_sign}"
+		puts "\n Сайт 1001goroskop.ru"
 
-		page=open(url)
-			#Читаем массив строк
-		page_text=page.read
-			#Регулярка для отбора строки
-		horoscope_array=page_text.scan(%r{description">.*<p>(.*)</p>})
-			#Раскодирование unicode->UTF-8
-		horoscope_string=horoscope_array.join.encode
-			#Вывод строки 
-		puts "\n Сайт 1001goroskop.ru","#{horoscope_string}"
+		doc = Nokogiri::HTML(open("http://1001goroskop.ru/?znak=#{@zodiac_sign}"))
+
+		doc.css('div[itemprop="description"]').each do |text|
+
+  	puts text.content.lstrip
+
+		end		
 
 	end
 
 	def third_site
 
-		url= "https://www.obozrevatel.com/astro/#{@zodiac_sign}/"
+		puts "\n Сайт obozrevatel.com"
 
-		page=open(url)
-			#Читаем массив строк
-		page_text=page.read
-			#Регулярка для отбора строки
-		horoscope_array=page_text.scan(%r{astro-content__txt"><strong>.*</strong><p>(.*)</p})
-			#Раскодирование unicode->UTF-8
-		horoscope_string=horoscope_array.join.encode
-			#Вывод строки 
-		puts "\nСайт obozrevatel.com","#{horoscope_string}"
+		doc = Nokogiri::HTML(open("https://www.obozrevatel.com/astro/#{@zodiac_sign}/"))
+
+		doc.css('div[class="astro-content__txt"] p').each do |text|
+
+  	puts text.content.lstrip
+
+		end		
 
 	end
 
 	def fourth_site
 
-		url= "https://horoscopes.rambler.ru/#{@zodiac_sign}/"
+		puts "\n Сайт horoscopes.rambler.ru"
 
-		page=open(url)
-			#Читаем массив строк
-		page_text=page.read
-			#Регулярка для отбора строки
-		horoscope_array=page_text.scan(%r{<span.*data-reactid="136">(.*)</span><a.*href="/})
-			#Раскодирование unicode->UTF-8
-		horoscope_string=horoscope_array.join.encode
-			#Вывод строки 
-		puts "\nСайт horoscopes.rambler.ru","#{horoscope_string}"
-		
+		doc = Nokogiri::HTML(open("https://horoscopes.rambler.ru/#{@zodiac_sign}/"))
+
+		doc.css('div[class="_1dQ3"] span').each do |text|
+
+  	puts text.content.lstrip
+
+		end	
+
 	end
 
 	def fifth_site
-		
-		url= "http://www.astrolive.ru/horo/anti/#{@zodiac_sign}.html"
 
-		page=open(url)
-			#Читаем массив строк
-		page_text=page.read
-			#Регулярка для отбора строки
-		horoscope_array=page_text.scan(%r{<p>.*<strong>.*</strong>(.*)</p>})
-			#Раскодирование unicode->UTF-8
-		horoscope_string=horoscope_array.join.encode
-			#Вывод строки 
-		puts "\nАнтиГороскоп:)","#{horoscope_string}"
+		puts "\n Сайт orakul.com"
+
+		doc = Nokogiri::HTML(open("https://orakul.com/horoscope/astrologic/more/#{@zodiac_sign}/today.html"))
+
+		doc.css('div[class="horoBlock"] p').each do |text|
+
+  	puts text.content.lstrip
+
+		end	
+		
 	end
 
 	def show_horo
